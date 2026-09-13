@@ -4,7 +4,7 @@ class CashRegister:
     def __init__(self, discount=0):
         self._discount = 0
         self.discount = discount
-        self.total = 0.0
+        self.total = 0
         self.items = []
         self.previous_transactions = []
 
@@ -23,7 +23,6 @@ class CashRegister:
         cost = price * quantity
         self.total += cost
         
-        # Append item for each unit in quantity so multiples are recorded
         for _ in range(quantity):
             self.items.append(item)
             
@@ -39,7 +38,12 @@ class CashRegister:
             return self.total
 
         discount_amount = self.total * (self.discount / 100)
-        self.total -= discount_amount
+        new_total = self.total - discount_amount
+        
+        # Convert float to int if there are no decimal places (e.g. 800.0 -> 800)
+        self.total = int(new_total) if int(new_total) == new_total else new_total
+        
+        print(f"After the discount, the total comes to ${self.total}.")
         return self.total
 
     def void_last_transaction(self):
